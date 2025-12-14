@@ -38,16 +38,14 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        q = self.request.GET.get("q")
-        if q:
-            queryset = queryset.filter(name__icontains=q)
-
+        query = self.request.GET.get("q")
+        if query:
+            queryset = queryset.filter(name__icontains=query)
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["search_query"] = self.request.GET.get("q", "")
-
         return context
 
 
@@ -75,9 +73,9 @@ class CarListView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        q = self.request.GET.get("q")
-        if q:
-            queryset = queryset.filter(model__icontains=q)
+        query = self.request.GET.get("q")
+        if query:
+            queryset = queryset.filter(model__icontains=query)
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -154,5 +152,4 @@ def toggle_assign_to_car(request, pk):
         driver.cars.remove(pk)
     else:
         driver.cars.add(pk)
-
     return HttpResponseRedirect(reverse_lazy("taxi:car-detail", args=[pk]))
